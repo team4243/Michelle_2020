@@ -40,6 +40,7 @@ std::string ColorSensorInterface::GetColorFromSensor(double confidence)
 
 std::string ColorSensorInterface::getColorFromFMS()
 {
+    return "R";
     std::string gameData;
     gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
     if(gameData.length() > 0)
@@ -74,7 +75,7 @@ std::string ColorSensorInterface::getColorFromFMS()
 bool ColorSensorInterface::ColorMatchesColorFromFMS()
 {
     std::string reqestedColor = getColorFromFMS();
-    std::string color = GetColorFromSensor(.5);
+    std::string color = GetColorFromSensor(50.0);
     if (reqestedColor.compare(color) == 0)
         return true;
     else

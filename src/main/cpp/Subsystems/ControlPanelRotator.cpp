@@ -41,6 +41,22 @@ void ControlPanelRotator::Periodic() {
 
 }
 
+void ControlPanelRotator::motorOnFast()
+{
+    controlPanelMotorController->Set(1.0);
+}
+
+void ControlPanelRotator::motorOnSlow()
+{
+    controlPanelMotorController->Set(0.1);
+}
+
+void ControlPanelRotator::motorStop()
+{
+    controlPanelMotorController->StopMotor();
+}
+
+
 bool ControlPanelRotator::SpinToColor(int numRotations, std::string color)
 {
     ColorSensorInterface colorSensor;
@@ -53,7 +69,7 @@ bool ControlPanelRotator::SpinToColor(int numRotations, std::string color)
 
     int loopCnt = 0;
     int maxLoopCnt = 100;
-    controlPanelMotorController->Set(1.0);
+    motorOnFast();
     while ((spinCount < numRotations) && (loopCnt < maxLoopCnt))
     {
         loopCnt++;
@@ -61,24 +77,24 @@ bool ControlPanelRotator::SpinToColor(int numRotations, std::string color)
         if (currentColor.compare(initColor) == 0)
             spinCount++;
         if ((spinCount == numRotations) || (loopCnt == maxLoopCnt))
-            controlPanelMotorController->StopMotor();
+            motorStop();
     }
 
     if (spinCount == numRotations)
     {
         loopCnt = 0;
-        controlPanelMotorController->Set(0.1);
+        motorOnSlow();
         while ((!colorFound) && (loopCnt < maxLoopCnt))
         {
             std::string currentColor = colorSensor.GetColorFromSensor(sensorConfidenceLevel);
             if (currentColor.compare(color) == 0)
             {
-                controlPanelMotorController->StopMotor();
+                motorStop();
                 colorFound = true;
                 std::this_thread::sleep_for(timespan);
             }
         }
-        controlPanelMotorController->StopMotor();
+        
     }
     else
     {
