@@ -1,4 +1,5 @@
  #include <frc/DriverStation.h>
+ #include <frc/smartdashboard/smartdashboard.h>
  #include "Subsystems/ColorSensorInterface.h"
  
  ColorSensorInterface::ColorSensorInterface()
@@ -34,7 +35,10 @@ std::string ColorSensorInterface::GetColorFromSensor(double confidence)
       colorString = "Y";
     } else {
       colorString = "Unknown";
-    }
+    } 
+
+    frc::SmartDashboard::PutString("Detected Color: ", colorString);
+
     return colorString;
 }
 
@@ -70,6 +74,10 @@ std::string ColorSensorInterface::getColorFromFMS()
         printf("\nNo color received from FMS");
     //Code for no data received yet
     }
+
+    frc::SmartDashboard::PutString("Reqested Color From FMS: ", colorFromFMS);
+
+    return colorFromFMS;
 }
 
 bool ColorSensorInterface::ColorMatchesColorFromFMS()
